@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import ForgotPass from './components/ForgotPass';
 import Projects from './components/Projects';
+import SignUp from './components/SignUp';
 
 const App = () => {
 
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/login" element={<Login/>} />
         <Route path="/forgotPass" element={<ForgotPass/>} />
         <Route path="/Project" element={<Projects/>} />
+        <Route path="/SignUp" element={<SignUp/>} />
 
 
      </Routes>

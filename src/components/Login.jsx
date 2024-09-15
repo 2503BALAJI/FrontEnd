@@ -1,15 +1,18 @@
 import React from 'react'
 import { useState } from 'react'
 import house from '../assets/Images/house.webp'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import ForgottPass from './ForgotPass'
 import SignUp from './SignUp'
 
 const Login = () => {
+
+  const navigate = useNavigate()
   const [formData,setFormData] = useState({
     email :"",
     password:""
   })
+
   console.log(formData );
 
   function submitHandler(event){
@@ -28,6 +31,7 @@ const Login = () => {
 
 
   }
+
   // w-11/12 max-w-[1160px] bg-black
   return (
     <form>
@@ -74,10 +78,13 @@ const Login = () => {
              </label>
 
               {/* Forgot password page */}
-              <NavLink to="/forgotPass"
-              className="text-blue-600">
-                Forgot password?
-               </NavLink>
+              <span   >
+                <NavLink to="/forgotPass"
+                className="text-blue-600">
+                  Forgot password?
+                </NavLink>
+              </span>
+             
 
           {/* button  */}
           <button className='bg-yellow-500 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-6  '>
@@ -93,7 +100,12 @@ const Login = () => {
 
             {/* forgott page link  */}
 
-            <p>Don't have accout ? <NavLink to="SignUp"> Register</NavLink></p>
+            <p>Don't have accout ? 
+             {/* <NavLink to="SignUp"> Register</NavLink> */}
+             <button onClick={()=>navigate('/SignUp')}>
+               Register
+              </button>
+            </p>
 
         </div>
        
