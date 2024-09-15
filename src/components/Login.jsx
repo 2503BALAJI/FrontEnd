@@ -1,13 +1,15 @@
 import React from 'react'
 import { useState } from 'react'
-import house from '../assets/Images/house.webp'
 import { NavLink, useNavigate } from 'react-router-dom'
-import ForgottPass from './ForgotPass'
-import SignUp from './SignUp'
+import { IoEye,IoEyeOff  } from "react-icons/io5";
+
 
 const Login = () => {
 
   const navigate = useNavigate()
+  const[passVisible,setPassVisible] = useState(false);
+
+
   const [formData,setFormData] = useState({
     email :"",
     password:""
@@ -29,7 +31,11 @@ const Login = () => {
     }))
     //setFormData([event.target.name]= event.target.value)
 
+  }
 
+  function passwordHandler(){
+    setPassVisible(!passVisible);
+   // setType(false)
   }
 
   // w-11/12 max-w-[1160px] bg-black
@@ -62,20 +68,28 @@ const Login = () => {
                 />
             </label>
 
-            <label className='w-full relative'>
-                <p className='text-[0.875rem] text-richblack-5 leading-[1.375rem] mb-1'> 
+            <label className='w-full  '>
+                <p className='text-[0.875rem]  leading-[1.375rem] mb-1'> 
                 password <sup className='text-pink-200'>*</sup>
                 </p>
-                <input
-                    required
-                    type="password"
-                    value={formData.password}
-                    name='password'
-                    placeholder='Enter password'
-                    onChange={changeHandler}
-                    className='bg-richblack-800 rounded-[0.5rem] text-richblack-5 w-full p-[12px]  '
-                />
+                <div className='flex relative'>
+                  <input
+                      required
+                      type={passVisible?"text":"password"}
+                      value={formData.password}
+                      name="password"
+                      placeholder='Enter password'
+                      onChange={changeHandler}
+                      className='rounded-[0.5rem] w-full p-[12px] '
+                  />
+                  <span onClick={passwordHandler}
+                  className='absolute right-0 top-3 text-[25px] pr-4'>
+                    {passVisible? (<IoEye color="#a8aeb9"/>):(<IoEyeOff color="#a8aeb9"/>)}
+                  </span>
+                </div>
+               
              </label>
+          
 
               {/* Forgot password page */}
               <span   >
@@ -87,7 +101,7 @@ const Login = () => {
              
 
           {/* button  */}
-          <button className='bg-yellow-500 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-6  '>
+          <button className='bg-yellow-500 rounded-[8px] font-medium  px-[12px] py-[8px] mt-6  '>
             Sign In
           </button>
 

@@ -1,10 +1,13 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { IoEye,IoEyeOff  } from "react-icons/io5";
+
 
 const SignUp = () => {
 
   const navigate = useNavigate();
+  const[passVisible,setPassVisible] = useState(false);
 
   const [formData,setFormData] = useState({
     email :"",
@@ -28,9 +31,11 @@ const SignUp = () => {
       [event.target.name]:event.target.value
     }))
     //setFormData([event.target.name]= event.target.value)
-
-
   } 
+
+  function passwordHandler(){
+    setPassVisible(!passVisible);
+  }
   return (
     <form>
       <div className='h-screen w-11/12 mx-auto flex flex-col justify-center items-center  bg-gray-500'>
@@ -64,33 +69,46 @@ const SignUp = () => {
               {/* Password field  */}
 
               <div className='flex space-x-3'>
-                <label className='w-full relative'>
-                  <p className='text-[0.875rem] text-richblack-5 leading-[1.375rem] mb-1'> 
-                  password <sup className='text-pink-200'>*</sup>
-                  </p>
+              <label className='w-full  '>
+                <p className='text-[0.875rem]  leading-[1.375rem] mb-1'> 
+                password <sup className='text-pink-200'>*</sup>
+                </p>
+                <div className='flex relative'>
                   <input
                       required
-                      type="password"
+                      type={passVisible?"text":"password"}
                       value={formData.password}
-                      name='password'
+                      name="password"
                       placeholder='Enter password'
                       onChange={changeHandler}
-                      className=' rounded-[0.5rem] w-full p-[12px]  '
+                      className='rounded-[0.5rem] w-full p-[12px] '
                   />
-               </label>
+                  <span onClick={passwordHandler}
+                    className='absolute right-0 top-3 text-[25px] pr-4'>
+                    {passVisible? (<IoEye color="#a8aeb9"/>):(<IoEyeOff color="#a8aeb9"/>)}
+                  </span>
+                </div>
+               
+             </label>
+
+                {/* confirm password field */}
                <label className='w-full relative'>
                   <p className='text-[0.875rem] text-richblack-5 leading-[1.375rem] mb-1'> 
                   Confirm password <sup className='text-pink-200'>*</sup>
                   </p>
                   <input
                       required
-                      type="password"
+                      type={passVisible? "text":"password"}
                       value={formData.confirmPassword}
                       name='confirmPassword'
                       placeholder='Enter Confirm password'
                       onChange={changeHandler}
                       className=' rounded-[0.5rem] w-full p-[12px]  '
                   />
+                  <span onClick={passwordHandler}
+                    className='absolute right-0 top-9 text-[25px] pr-4'>
+                    {passVisible? (<IoEye color="#a8aeb9"/>):(<IoEyeOff color="#a8aeb9" />)}
+                  </span>
                 </label>
               </div>
 
