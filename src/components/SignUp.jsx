@@ -83,45 +83,47 @@ const SignUp = () => {
   return (
     <form
       onSubmit={submitHandler}
-      className="h-full py-4 flex items-center justify-center bg-gray-100"
+      className="h-full py-1 flex items-center justify-center bg-gray-100"
     >
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg md:w-3/4 lg:w-1/2">
-        <h2 className="text-2xl font-bold mb-4 text-gray-700">Sign Up</h2>
-        <p className="mb-6 text-gray-600">
+      <div className="bg-white rounded-lg shadow-lg px-4 py-2 w-full max-w-lg md:w-3/4 lg:w-1/2">
+        <h2 className="text-2xl font-bold mb-2 text-gray-700">Sign Up</h2>
+        <p className="mb-4 text-gray-600">
           Create your account for Legacy Land Investment.
         </p>
 
-        {/* First Name */}
-        <label className="block mb-3">
-          <span className="text-gray-600">
-            First Name <sup className="text-pink-500">*</sup>
-          </span>
-          <input
-            required
-            type="text"
-            value={formData.firstName}
-            name="firstName"
-            placeholder="Enter First Name"
-            onChange={changeHandler}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
-          />
-        </label>
+        <div className="flex gap-4">
+          <label className="block mb-2">
+            <span className="text-gray-600">
+              First Name <sup className="text-pink-500">*</sup>
+            </span>
+            <input
+              required
+              type="text"
+              value={formData.firstName}
+              name="firstName"
+              placeholder="Enter First Name"
+              onChange={changeHandler}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+            />
+          </label>
 
-        {/* Last Name */}
-        <label className="block mb-3">
-          <span className="text-gray-600">
-            Last Name <sup className="text-pink-500">*</sup>
-          </span>
-          <input
-            required
-            type="text"
-            value={formData.lastName}
-            name="lastName"
-            placeholder="Enter Last Name"
-            onChange={changeHandler}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
-          />
-        </label>
+          {/* Last Name */}
+          <label className="block mb-3">
+            <span className="text-gray-600">
+              Last Name <sup className="text-pink-500">*</sup>
+            </span>
+            <input
+              required
+              type="text"
+              value={formData.lastName}
+              name="lastName"
+              placeholder="Enter Last Name"
+              onChange={changeHandler}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+            />
+          </label>
+        </div>
+        {/* First Name */}
 
         {/* Email */}
         <label className="block mb-3">
@@ -205,7 +207,7 @@ const SignUp = () => {
         </label>
 
         {/* Terms and Conditions */}
-        <label className="flex items-center mb-4">
+        <label className="flex items-center mb-2">
           <input type="checkbox" required className="mr-2" />
           <span className="text-gray-600">
             I agree to the Terms and Conditions
@@ -213,7 +215,7 @@ const SignUp = () => {
         </label>
 
         {/* Error Message */}
-        {error && <p className="text-red-500 mb-3">{error}</p>}
+        {error && <p className="text-red-500 mb-2">{error}</p>}
 
         {/* Submit Button */}
         <button
@@ -223,7 +225,7 @@ const SignUp = () => {
           Sign Up
         </button>
 
-        <div className="mt-6 text-center">
+        <div className="mt-2 text-center">
           <div className="flex items-center justify-center mb-4">
             <span className="block h-px bg-gray-300 w-full"></span>
             <span className="px-4 text-gray-500">OR</span>
