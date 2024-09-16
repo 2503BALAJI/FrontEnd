@@ -1,133 +1,153 @@
-import React from 'react'
-import { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { IoEye,IoEyeOff  } from "react-icons/io5";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { IoEye, IoEyeOff } from "react-icons/io5";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import app from "../Firebase/Firebaseconfig";
 
+const auth = getAuth(app);
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [passVisible, setPassVisible] = useState(false);
+  const [error, setError] = useState(null);
 
-  const navigate = useNavigate()
-  const[passVisible,setPassVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-
-  const [formData,setFormData] = useState({
-    email :"",
-    password:""
-  })
-
-  console.log(formData );
-
-  function submitHandler(event){
-    event.preventDefault();
-    event.target.value
-    console.log(event)
-
-  }
-
-  function changeHandler(event){
-    setFormData((prevData)=>({
+  function changeHandler(event) {
+    setFormData((prevData) => ({
       ...prevData,
-      [event.target.name]:event.target.value
-    }))
-    //setFormData([event.target.name]= event.target.value)
-
+      [event.target.name]: event.target.value,
+    }));
   }
 
-  function passwordHandler(){
+  function passwordHandler() {
     setPassVisible(!passVisible);
-   // setType(false)
   }
 
-  // w-11/12 max-w-[1160px] bg-black
+  async function submitHandler(event) {
+    event.preventDefault();
+
+    // Basic validation
+    if (!formData.email || !formData.password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      // Navigate to dashboard or home page on successful login
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      // Detailed error handling
+      switch (error.code) {
+        case "auth/wrong-password":
+          setError("Incorrect password.");
+          break;
+        case "auth/user-not-found":
+          setError("User not found.");
+          break;
+        case "auth/invalid-email":
+          setError("Invalid email address.");
+          break;
+        default:
+          setError("Failed to log in. Please try again.");
+          break;
+      }
+    }
+  }
+
   return (
-    <form>
-      <div className='h-screen w-11/12 mx-auto flex flex-col justify-center items-center  bg-gray-500'>
+    <form onSubmit={submitHandler}>
+      <div className="h-screen w-full flex flex-col justify-center items-center bg-white">
+        <div className="w-full max-w-md bg-white shadow-md rounded-md p-8">
+          <h2 className="font-bold text-2xl text-gray-800 mb-4">Sign In</h2>
+          <p className="text-left mb-5 text-gray-600">
+            Welcome back to Legacy Land Investment
+          </p>
 
-        <div className='w-[500px] h-[600px] bg-red-400 flex flex-col py-2 px-4  '>
-
-           <h2 className='font-bold text-3xl text-gray-700 mb-2'> 
-             Sign in 
-           </h2>
-            <p className='text-left mb-5'> 
-             Welcome To The Legacy Land Investment
+          <label className="w-full">
+            <p className="text-sm text-gray-700 mb-2">
+              Email Address <sup className="text-red-500">*</sup>
             </p>
+            <input
+              required
+              type="email"
+              value={formData.email}
+              name="email"
+              placeholder="Enter Email Address"
+              onChange={changeHandler}
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-400 mb-4"
+            />
+          </label>
 
-
-            <label className='w-full'>
-                <p className='text-[0.875rem] text-richblack-5 leading-[1.375rem] mb-1'> 
-                Email Address <sup className='text-pink-500'>*</sup>
-                </p>
-                <input
-                    required
-                    type='email'
-                    value={formData.email}
-                    name='email'
-                    placeholder='Enter Email-address '
-                    onChange={changeHandler}
-                    className='bg-richblack-800 rounded-[0.5rem] text-richblack-5 w-full mb-2 p-[12px]  '
-                />
-            </label>
-
-            <label className='w-full  '>
-                <p className='text-[0.875rem]  leading-[1.375rem] mb-1'> 
-                password <sup className='text-pink-200'>*</sup>
-                </p>
-                <div className='flex relative'>
-                  <input
-                      required
-                      type={passVisible?"text":"password"}
-                      value={formData.password}
-                      name="password"
-                      placeholder='Enter password'
-                      onChange={changeHandler}
-                      className='rounded-[0.5rem] w-full p-[12px] '
-                  />
-                  <span onClick={passwordHandler}
-                  className='absolute right-0 top-3 text-[25px] pr-4'>
-                    {passVisible? (<IoEye color="#a8aeb9"/>):(<IoEyeOff color="#a8aeb9"/>)}
-                  </span>
-                </div>
-               
-             </label>
-          
-
-              {/* Forgot password page */}
-              <span   >
-                <NavLink to="/forgotPass"
-                className="text-blue-600">
-                  Forgot password?
-                </NavLink>
+          <label className="w-full">
+            <p className="text-sm text-gray-700 mb-2">
+              Password <sup className="text-red-500">*</sup>
+            </p>
+            <div className="relative">
+              <input
+                required
+                type={passVisible ? "text" : "password"}
+                value={formData.password}
+                name="password"
+                placeholder="Enter Password"
+                onChange={changeHandler}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-400"
+              />
+              <span
+                onClick={passwordHandler}
+                className="absolute right-3 top-3 cursor-pointer text-gray-500"
+              >
+                {passVisible ? <IoEye /> : <IoEyeOff />}
               </span>
-             
+            </div>
+          </label>
 
-          {/* button  */}
-          <button className='bg-yellow-500 rounded-[8px] font-medium  px-[12px] py-[8px] mt-6  '>
+          <div className="text-right mt-2">
+            <NavLink to="/forgotPass" className="text-blue-600">
+              Forgot password?
+            </NavLink>
+          </div>
+
+          {/* Error message */}
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+
+          <button
+            type="submit"
+            className="bg-blue-500 text-white w-full py-2 rounded-md mt-6 hover:bg-blue-600 transition"
+          >
             Sign In
           </button>
 
-          
-             <div className='flex w-full item-center my-4 gap-x-2'>
-               <div className='bg-black h-[1px] w-full'></div>
-               <p className='text-black leading-[1.375rem] font-bold my-[-10px]'>OR</p>
-               <div  className='bg-black h-[1px] w-full'></div> 
-             </div>
+          <div className="flex items-center my-4">
+            <div className="flex-grow border-t border-gray-300"></div>
+            <span className="mx-2 text-gray-500">OR</span>
+            <div className="flex-grow border-t border-gray-300"></div>
+          </div>
 
-            {/* forgott page link  */}
-
-            <p>Don't have accout ? 
-             {/* <NavLink to="SignUp"> Register</NavLink> */}
-             <button onClick={()=>navigate('/SignUp')}>
-               Register
+          <div className="text-center">
+            <p>
+              Don't have an account?{" "}
+              <button
+                onClick={() => navigate("/SignUp")}
+                className="text-blue-600 underline"
+              >
+                Register
               </button>
             </p>
-
+          </div>
         </div>
-       
-
-
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
