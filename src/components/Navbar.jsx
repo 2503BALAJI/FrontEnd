@@ -13,8 +13,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-600 text-white p-4 shadow-lg fixed w-full top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="bg-blue-600 w-full text-white p-4 shadow-lg fixed  top-0 z-50">
+      <div className="container w-11/12 mx-auto flex justify-between items-center">
         {/* Logo */}
         <NavLink to="/">
           <div className="flex items-center space-x-2">
