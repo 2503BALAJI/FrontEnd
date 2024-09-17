@@ -3,14 +3,11 @@ import { Route, Routes } from "react-router-dom";
 import ClientLayout from "./Layout/ClientLayout";
 import AdminLayout from "./Layout/AdminLayout";
 import Home from "./components/Home";
-import Contact_us from "./components/Contact_us";
-import About_us from "./components/About_us";
 import Login from "./components/Login";
 import ForgotPass from "./components/ForgotPass";
 import Projects from "./components/Projects";
 import SignUp from "./components/SignUp";
 import VideoGrid from "./components/Vedio";
-import Dashboard from "./Admin/Dashboard";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,22 +24,13 @@ const App = () => {
         }
       />
       <Route
-        path="/contact"
+        path="/login"
         element={
           <ClientLayout>
-            <Contact_us />
+            <Login />
           </ClientLayout>
         }
       />
-      <Route
-        path="/about"
-        element={
-          <ClientLayout>
-            <About_us />
-          </ClientLayout>
-        }
-      />
-      <Route path="/login" element={<Login />} />
       <Route path="/forgotPass" element={<ForgotPass />} />
       <Route
         path="/projects"
@@ -52,7 +40,14 @@ const App = () => {
           </ClientLayout>
         }
       />
-      <Route path="/signUp" element={<SignUp />} />
+      <Route
+        path="/signUp"
+        element={
+          <ClientLayout>
+            <SignUp />
+          </ClientLayout>
+        }
+      />
       <Route
         path="/testimony"
         element={

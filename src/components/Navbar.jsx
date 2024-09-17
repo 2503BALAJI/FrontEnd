@@ -16,32 +16,32 @@ const Navbar = () => {
     <nav className="bg-blue-600 w-full text-white p-4 shadow-lg fixed  top-0 z-50">
       <div className="container w-11/12 mx-auto flex justify-between items-center">
         {/* Logo */}
-        <NavLink to="/">
+        <a href="/">
           <div className="flex items-center space-x-2">
             {/* <img src="./img" alt="Logo" className="w-10 h-10" /> */}
             <p className="text-xl font-bold">Legacy Land Investment</p>
           </div>
-        </NavLink>
+        </a>
 
         {/* Centered links */}
         <div className="hidden md:flex space-x-6">
-          <NavLink
-            to="/about"
+          <a
+            href="#About"
             className={({ isActive }) =>
               isActive ? "text-yellow-300" : "hover:text-yellow-200"
             }
           >
             About
-          </NavLink>
+          </a>
 
-          <NavLink
-            to="/contact"
+          <a
+            href="#contact"
             className={({ isActive }) =>
               isActive ? "text-yellow-300" : "hover:text-yellow-200"
             }
           >
             Contact
-          </NavLink>
+          </a>
 
           <NavLink
             to="/projects"

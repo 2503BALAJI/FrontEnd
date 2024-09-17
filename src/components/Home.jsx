@@ -9,12 +9,17 @@ const Home = () => {
     <>
       <div className="relative w-full h-[calc(100vh-64px)]">
         {/* Background Image */}
-        <img src={Mainimg} alt="Main" className="w-full h-full object-cover" />
+        <img
+          src={Mainimg}
+          alt="Main"
+          className="w-full h-full object-cover"
+          id="home"
+        />
 
         {/* Text overlay on Image */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="bg-black bg-opacity-50 text-white p-6 md:p-10 rounded-lg max-w-xl text-center">
-            <h1 className="text-2xl md:text-4xl font-bold mb-4">
+            <h1 className="text-2xl md:text-4xl font-bold mb-4 overflow-hidden">
               Unlock Unparalleled Growth Potential
             </h1>
             <p className="text-sm md:text-lg leading-relaxed">
@@ -25,9 +30,11 @@ const Home = () => {
         </div>
 
         {/* Main Section */}
-        <Vision />
-        <InvestmentOptions/>
-        <Contact_us/>
+        <div className="py-2">
+          <Vision />
+        </div>
+        <InvestmentOptions />
+        <Contact_us />
       </div>
     </>
   );
