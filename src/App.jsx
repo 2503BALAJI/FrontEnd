@@ -9,6 +9,7 @@ import ForgotPass from "./components/ForgotPass";
 import Projects from "./components/Projects";
 import SignUp from "./components/SignUp";
 import Navbar from "./components/Navbar";
+import VideoGrid from "./components/Vedio";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/forgotPass" element={<ForgotPass />} />
           <Route path="/Project" element={<Projects />} />
           <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/testimony" element={<VideoGrid />} />
         </Routes>
       </div>
     </div>
