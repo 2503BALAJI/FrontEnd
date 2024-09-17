@@ -1,41 +1,70 @@
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import ClientLayout from "./Layout/ClientLayout";
+import AdminLayout from "./Layout/AdminLayout";
 import Home from "./components/Home";
 import Contact_us from "./components/Contact_us";
 import About_us from "./components/About_us";
-import Footer from "./components/Footer";
 import Login from "./components/Login";
 import ForgotPass from "./components/ForgotPass";
 import Projects from "./components/Projects";
 import SignUp from "./components/SignUp";
-import Navbar from "./components/Navbar";
 import VideoGrid from "./components/Vedio";
+import Dashboard from "./Admin/Dashboard";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <div className="w-screen bg-[#f3f2f0]">
-      {/* Include the Navbar */}
-      <Navbar />
+    <Routes>
+      {/* Client Routes */}
+      <Route
+        path="/"
+        element={
+          <ClientLayout>
+            <Home />
+          </ClientLayout>
+        }
+      />
+      <Route
+        path="/contact"
+        element={
+          <ClientLayout>
+            <Contact_us />
+          </ClientLayout>
+        }
+      />
+      <Route
+        path="/about"
+        element={
+          <ClientLayout>
+            <About_us />
+          </ClientLayout>
+        }
+      />
+      <Route path="/login" element={<Login />} />
+      <Route path="/forgotPass" element={<ForgotPass />} />
+      <Route
+        path="/projects"
+        element={
+          <ClientLayout>
+            <Projects />
+          </ClientLayout>
+        }
+      />
+      <Route path="/signUp" element={<SignUp />} />
+      <Route
+        path="/testimony"
+        element={
+          <ClientLayout>
+            <VideoGrid />
+          </ClientLayout>
+        }
+      />
 
-      {/* Add a top padding equivalent to the navbar height */}
-      <div className="pt-16 min-h-screen bg-gray-100">
-        {" "}
-        {/* pt-16 ensures there's enough space below the fixed navbar */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/contact" element={<Contact_us />} />
-          <Route path="/about" element={<About_us />} />
-          <Route path="/footer" element={<Footer />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgotPass" element={<ForgotPass />} />
-          <Route path="/Project" element={<Projects />} />
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/testimony" element={<VideoGrid />} />
-        </Routes>
-      </div>
-    </div>
+      {/* Admin Routes */}
+      <Route path="/admin/Dashboard" element={<AdminLayout></AdminLayout>} />
+    </Routes>
   );
 };
 
