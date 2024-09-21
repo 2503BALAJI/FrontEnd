@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import app from "../Firebase/Firebaseconfig";
+import { app } from "../Firebase/Firebaseconfig";
 
 import {
   getAuth,
