@@ -1,5 +1,4 @@
 import React from "react";
-import { FaEnvelope, FaPhone, FaCommentDots } from "react-icons/fa"; // Using react-icons for icons
 import background from "../assets/background_img.jpg";
 import email_icon from "../assets/Images/email_icon.png";
 import chat_icon from "../assets/Images/chat_icon.png";
@@ -10,10 +9,11 @@ const Contact_us = () => {
   return (
     <div
       id={"contact"}
-      className="py-12 w-full bg-cover  bg-center"
+      className="py-12 w-full bg-contain"
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="container mx-auto px-4 w-11/12">
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {/* EMAIL Section */}
           <div className="bg-white bg-opacity-80 p-6 rounded-lg flex flex-col justify-center items-center shadow-lg">
@@ -58,6 +58,7 @@ const Contact_us = () => {
               href="https://wa.me/9834XXXX"
               target="_blank"
               rel="noopener noreferrer"
+               className="text-blue-500"
             >
               On WhatsApp
             </a>

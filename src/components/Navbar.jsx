@@ -95,6 +95,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile menu button */}
+
         <div className="md:hidden">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? (
@@ -107,6 +108,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
+
       {isMenuOpen && (
         <div className="md:hidden bg-blue-600 mt-4">
           <NavLink
@@ -134,6 +136,7 @@ const Navbar = () => {
           {/* Mobile Login/Signup or Profile/Logout */}
           {!isLoggedIn ? (
             <>
+            
               <NavLink
                 to="/login"
                 className="block px-4 py-2 text-white hover:bg-blue-500"
@@ -148,6 +151,7 @@ const Navbar = () => {
               >
                 Sign Up
               </NavLink>
+
             </>
           ) : (
             <>

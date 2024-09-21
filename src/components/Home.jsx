@@ -30,11 +30,12 @@ const Home = () => {
         </div>
 
         {/* Main Section */}
-        <div className="py-2">
-          <Vision />
-        </div>
+        
+        <Vision />
         <InvestmentOptions />
         <Contact_us />
+
+        
       </div>
     </>
   );

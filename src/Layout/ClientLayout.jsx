@@ -8,7 +8,13 @@ const ClientLayout = ({ children }) => {
       <Navbar />
 
       {/* Add a top padding equivalent to the navbar height */}
-      <div className="pt-16 h-screen bg-gray-100">{children}</div>
+      <div className="pt-16 h-screen bg-gray-100"> 
+
+       {children}
+
+      </div>
+
+      
     </div>
   );
 };

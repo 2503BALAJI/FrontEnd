@@ -1,11 +1,13 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Assuming you're using React Router for navigation
+import { useNavigate } from "react-router-dom";
+import frameImg from "../assets/Images/frame.png";
+
 
 // Reusable InvestmentCard component
 const InvestmentCard = ({ title, imgUrl, onClick, altText }) => {
   return (
     <div
-      className="flex flex-col items-center text-center cursor-pointer group transition-transform transform hover:scale-105"
+      className="flex flex-col items-center text-center cursor-pointer group transition-transform transform hover:scale-105 "
       onClick={onClick}
     >
       <div className="w-64 h-48 bg-gray-200 flex items-center justify-center mb-4 rounded-lg shadow-lg overflow-hidden">
@@ -13,7 +15,7 @@ const InvestmentCard = ({ title, imgUrl, onClick, altText }) => {
           src={imgUrl}
           alt={altText}
           className="object-cover w-full h-full transition-opacity duration-300 group-hover:opacity-80"
-          onError={(e) => (e.target.src = "/path/to/default-image.png")} // Placeholder image on error
+          onError={(e) => (e.target.src = {frameImg})} // Placeholder image on error
         />
       </div>
       <h3 className="text-xl font-bold group-hover:text-blue-500 transition-colors duration-300">
@@ -51,8 +53,10 @@ const InvestmentOptions = () => {
   ];
 
   return (
-    <div className="flex flex-wrap justify-center space-x-4 md:space-x-10 py-10">
+    <div className="flex flex-wrap justify-center space-x-4 md:space-x-10 pt-20 py-10 ">
+
       {cardData.map((card, index) => (
+
         <InvestmentCard
           key={index}
           title={card.title}
@@ -60,6 +64,7 @@ const InvestmentOptions = () => {
           onClick={card.onClick}
           altText={card.altText}
         />
+
       ))}
     </div>
   );

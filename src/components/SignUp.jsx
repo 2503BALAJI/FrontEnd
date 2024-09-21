@@ -103,7 +103,7 @@ const SignUp = () => {
               name="firstName"
               placeholder="Enter First Name"
               onChange={changeHandler}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+              className="mt-1 w-full border  border-gray-300 focus:outline-none focus:border-blue-400 rounded-md  p-2"
             />
           </label>
 
@@ -119,7 +119,7 @@ const SignUp = () => {
               name="lastName"
               placeholder="Enter Last Name"
               onChange={changeHandler}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+              className="mt-1 w-full border  border-gray-300 focus:outline-none focus:border-blue-400 rounded-md  p-2"
             />
           </label>
         </div>
@@ -137,7 +137,7 @@ const SignUp = () => {
             name="email"
             placeholder="Enter Email Address"
             onChange={changeHandler}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+            className="mt-1 w-full border  border-gray-300 focus:outline-none focus:border-blue-400 rounded-md  p-2"
           />
         </label>
 
@@ -150,18 +150,18 @@ const SignUp = () => {
             <div className="relative">
               <input
                 required
-                type={passVisible ? "text" : "password"}
+                type={passVisible ?   "text" : "password"  }
                 value={formData.password}
                 name="password"
                 placeholder="Enter Password"
                 onChange={changeHandler}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+                className="mt-1 w-full border  border-gray-300 focus:outline-none focus:border-blue-400 rounded-md  p-2"
               />
               <span
                 onClick={passwordHandler}
-                className="absolute right-3 top-3 cursor-pointer"
+                className="absolute right-3 top-3 cursor-pointer pt-1"
               >
-                {passVisible ? <IoEyeOff /> : <IoEye />}
+                {passVisible ?  <IoEye /> : <IoEyeOff /> }
               </span>
             </div>
           </label>
@@ -173,18 +173,18 @@ const SignUp = () => {
             <div className="relative">
               <input
                 required
-                type={passVisible ? "text" : "password"}
+                type={passVisible ?  "text" : "password" }
                 value={formData.confirmPassword}
                 name="confirmPassword"
                 placeholder="Confirm Password"
                 onChange={changeHandler}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+                className="mt-1  w-full border  border-gray-300 focus:outline-none focus:border-blue-400 rounded-md  p-2"
               />
               <span
                 onClick={passwordHandler}
-                className="absolute right-3 top-3 cursor-pointer"
+                className="absolute right-3 top-3 cursor-pointer pt-1"
               >
-                {passVisible ? <IoEyeOff /> : <IoEye />}
+                {passVisible ? <IoEye /> : <IoEyeOff />}
               </span>
             </div>
           </label>
@@ -202,7 +202,7 @@ const SignUp = () => {
             name="phoneNumber"
             placeholder="Enter Phone Number"
             onChange={changeHandler}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+            className="mt-1 w-full border  border-gray-300 focus:outline-none focus:border-blue-400 rounded-md  p-2"
           />
         </label>
 
