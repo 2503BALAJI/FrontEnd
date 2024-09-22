@@ -9,12 +9,12 @@ const Contact_us = () => {
   return (
     <div
       id={"contact"}
-      className="py-12 w-full bg-contain"
+      className=" w-full bg-contain mb-10 p-5"
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="container mx-auto px-4 w-11/12">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-12">
           {/* EMAIL Section */}
           <div className="bg-white bg-opacity-80 p-6 rounded-lg flex flex-col justify-center items-center shadow-lg">
             <img
@@ -42,12 +42,13 @@ const Contact_us = () => {
               className="p-3 w-16 h-16 object-contain"
             />
             <h2 className="text-2xl font-bold mb-2">CALL</h2>
-            <p>98347XXXXX</p>
+            <p>9525993131</p>
             <p>Monday–Thursday 7:00 am – 3:00 pm</p>
           </div>
 
           {/* CHAT Section */}
           <div className="bg-white bg-opacity-80 p-6 flex flex-col justify-center items-center rounded-lg shadow-lg">
+        
             <img
               src={chat_icon}
               alt="chat icon"
@@ -55,7 +56,7 @@ const Contact_us = () => {
             />
             <h2 className="text-2xl font-bold mb-2">CHAT</h2>
             <a
-              href="https://wa.me/9834XXXX"
+              href="https://wa.me/9525993131"
               target="_blank"
               rel="noopener noreferrer"
                className="text-blue-500"
@@ -78,7 +79,7 @@ const Contact_us = () => {
           <div className="mt-12 text-center">
             <h3 className="text-xl font-bold mb-4">ADDITIONAL CONTACTS:</h3>
             <p>
-              Press Inquiries:{" "}
+              Press Inquiries:
               <a
                 href="mailto:media@honest.com"
                 className="text-blue-500 underline"
@@ -87,7 +88,7 @@ const Contact_us = () => {
               </a>
             </p>
             <p>
-              Influencer Inquiries:{" "}
+              Influencer Inquiries:
               <a
                 href="mailto:influencers@honest.com"
                 className="text-blue-500 underline"
@@ -96,7 +97,7 @@ const Contact_us = () => {
               </a>
             </p>
             <p>
-              Social Brand Partnerships:{" "}
+              Social Brand Partnerships:
               <a
                 href="mailto:social@honest.com"
                 className="text-blue-500 underline"
@@ -105,7 +106,7 @@ const Contact_us = () => {
               </a>
             </p>
             <p>
-              Giving:{" "}
+              Giving:
               <a
                 href="mailto:socialgoodness@honest.com"
                 className="text-blue-500 underline"

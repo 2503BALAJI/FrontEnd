@@ -7,7 +7,7 @@ import frameImg from "../assets/Images/frame.png";
 const InvestmentCard = ({ title, imgUrl, onClick, altText }) => {
   return (
     <div
-      className="flex flex-col items-center text-center cursor-pointer group transition-transform transform hover:scale-105 "
+      className="flex flex-col items-center text-center cursor-pointer group transition-transform transform hover:scale-105 mb-5 "
       onClick={onClick}
     >
       <div className="w-64 h-48 bg-gray-200 flex items-center justify-center mb-4 rounded-lg shadow-lg overflow-hidden">

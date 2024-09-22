@@ -3,6 +3,10 @@ import Mainimg from "../assets/Images/homeimmg.png";
 import Vision from "./Vision";
 import InvestmentOptions from "./InvestmentOptions";
 import Contact_us from "./Contact_us";
+import AboutUs from "./AboutUs";
+import Question from "./Question";
+import Footer from "./Footer";
+
 
 const Home = () => {
   return (
@@ -34,6 +38,9 @@ const Home = () => {
         <Vision />
         <InvestmentOptions />
         <Contact_us />
+        <AboutUs/>
+        <Question/>
+        <Footer/>
 
         
       </div>

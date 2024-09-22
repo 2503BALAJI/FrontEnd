@@ -9,7 +9,7 @@ const Vision = () => {
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 overflow-hidden">
           Welcome to Legacy Land Investment
         </h2>
-        <p className="text-base md:text-lg lg:text-xl text-gray-800 leading-relaxed">
+        <p className="text-base md:text-lg lg:text-xl text-gray-800 leading-relaxed ">
           Your trusted platform for real estate investment opportunities.
           Explore lucrative avenues to invest and generate high returns in the
           rapidly growing real estate sector.
@@ -49,7 +49,7 @@ const Vision = () => {
               size="2x"
               className="text-blue-500 mr-4"
             />
-            <p className="text-gray-800 text-sm md:text-base lg:text-lg overflow-hidden">
+            <p className="text-gray-800 text-sm md:text-base lg:text-lg overflow-hidden leading-relaxed">
               To become a leading platform in real estate investment, providing
               individuals with opportunities to achieve financial freedom
               through smart real estate choices.

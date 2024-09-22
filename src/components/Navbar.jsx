@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-600 w-full text-white p-4 shadow-lg fixed  top-0 z-50">
+    <nav className="bg-blue-600 w-full text-white p-4 shadow-lg fixed  top-0 z-50 ">
       <div className="container w-11/12 mx-auto flex justify-between items-center">
         {/* Logo */}
         <a href="/">
@@ -26,7 +26,7 @@ const Navbar = () => {
         {/* Centered links */}
         <div className="hidden md:flex space-x-6">
           <a
-            href="#About"
+            href="#about"
             className={({ isActive }) =>
               isActive ? "text-yellow-300" : "hover:text-yellow-200"
             }
@@ -51,6 +51,12 @@ const Navbar = () => {
           >
             Projects
           </NavLink>
+
+          <a 
+           href="#question" 
+          >
+          Questions
+          </a>
         </div>
 
         {/* Right-aligned Login/Signup or Profile/Logout */}
@@ -107,24 +113,28 @@ const Navbar = () => {
         </div>
       </div>
 
+
+
+
       {/* Mobile Menu */}
 
       {isMenuOpen && (
         <div className="md:hidden bg-blue-600 mt-4">
-          <NavLink
-            to="/about"
+          <a 
+           href="#about"
+     
             className="block px-4 py-2 text-white hover:bg-blue-500"
             onClick={() => setIsMenuOpen(false)}
           >
             About
-          </NavLink>
-          <NavLink
-            to="/contact"
+          </a>
+          <a href="contact"
+           
             className="block px-4 py-2 text-white hover:bg-blue-500"
             onClick={() => setIsMenuOpen(false)}
           >
             Contact
-          </NavLink>
+          </a>
           <NavLink
             to="/projects"
             className="block px-4 py-2 text-white hover:bg-blue-500"
