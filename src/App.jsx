@@ -8,6 +8,8 @@ import ForgotPass from "./components/ForgotPass";
 import Projects from "./components/Projects";
 import SignUp from "./components/SignUp";
 import VideoGrid from "./components/Vedio";
+import AdminPanelVedio from "./Admin/AdminPanelVedio";
+import Dashboard from "./Admin/Dashboard";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,7 +60,22 @@ const App = () => {
       />
 
       {/* Admin Routes */}
-      <Route path="/admin/Dashboard" element={<AdminLayout></AdminLayout>} />
+      <Route
+        path="/admin/Dashboard"
+        element={
+          <AdminLayout>
+            <Dashboard />
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="/admin/AdminPanelVedio"
+        element={
+          <AdminLayout>
+            <AdminPanelVedio />
+          </AdminLayout>
+        }
+      />
     </Routes>
   );
 };

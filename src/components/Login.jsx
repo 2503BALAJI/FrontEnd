@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import app from "../Firebase/Firebaseconfig";
+import {app} from "../Firebase/Firebaseconfig";
 
 const auth = getAuth(app);
 

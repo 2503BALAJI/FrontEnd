@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 
 const AdminLayout = ({ children }) => {
+  const navItems = [
+    { name: "Dashboard", link: "Dashboard" },
+    { name: "Add Vedio", link: "AdminPanelVedio" },
+  ];
+
   return (
     <div className="w-screen bg-[#f3f2f0]">
       <div className="flex">
@@ -8,38 +13,16 @@ const AdminLayout = ({ children }) => {
         <nav className="w-64 bg-gray-800 text-white h-screen p-5">
           <div className="text-2xl font-bold mb-8">Admin Dashboard</div>
           <ul className="space-y-4">
-            <li>
-              <a
-                href="#home"
-                className="hover:bg-gray-700 block py-2 px-4 rounded"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="#projects"
-                className="hover:bg-gray-700 block py-2 px-4 rounded"
-              >
-                Projects
-              </a>
-            </li>
-            <li>
-              <a
-                href="#reports"
-                className="hover:bg-gray-700 block py-2 px-4 rounded"
-              >
-                Reports
-              </a>
-            </li>
-            <li>
-              <a
-                href="#settings"
-                className="hover:bg-gray-700 block py-2 px-4 rounded"
-              >
-                Settings
-              </a>
-            </li>
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <a
+                  href={item.link}
+                  className="hover:bg-gray-700 block py-2 px-4 rounded"
+                >
+                  {item.name}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
 
