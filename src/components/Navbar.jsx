@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { HiMenu, HiX } from "react-icons/hi"; // For the mobile menu toggle
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   // Function to handle logout (optional)
   const handleLogout = () => {
@@ -12,36 +13,35 @@ const Navbar = () => {
     setIsMenuOpen(false); // Close menu on mobile after logout
   };
 
+  // Check if current route is home ("/")
+  const isHome = location.pathname === "/";
+
   return (
-    <nav className="bg-blue-600 w-full text-white p-4 shadow-lg fixed  top-0 z-50 ">
+    <nav className="bg-blue-600 w-full text-white p-4 shadow-lg fixed top-0 z-50">
       <div className="container w-11/12 mx-auto flex justify-between items-center">
         {/* Logo */}
-        <a href="/">
-          <div className="flex items-center space-x-2">
-            {/* <img src="./img" alt="Logo" className="w-10 h-10" /> */}
-            <p className="text-xl font-bold">Legacy Land Investment</p>
-          </div>
+        <a href="/" className="flex items-center space-x-2">
+          <p className="text-xl font-bold">Legacy Land Investment</p>
         </a>
 
         {/* Centered links */}
         <div className="hidden md:flex space-x-6">
-          <a
-            href="#about"
-            className={({ isActive }) =>
-              isActive ? "text-yellow-300" : "hover:text-yellow-200"
-            }
-          >
-            About
-          </a>
-
-          <a
-            href="#contact"
-            className={({ isActive }) =>
-              isActive ? "text-yellow-300" : "hover:text-yellow-200"
-            }
-          >
-            Contact
-          </a>
+          {isHome && (
+            <>
+              <a
+                href="#about"
+                className="hover:text-yellow-200 transition duration-300"
+              >
+                About
+              </a>
+              <a
+                href="#contact"
+                className="hover:text-yellow-200 transition duration-300"
+              >
+                Contact
+              </a>
+            </>
+          )}
 
           <NavLink
             to="/projects"
@@ -52,11 +52,14 @@ const Navbar = () => {
             Projects
           </NavLink>
 
-          <a 
-           href="#question" 
+          <NavLink
+            to="/question"
+            className={({ isActive }) =>
+              isActive ? "text-yellow-300" : "hover:text-yellow-200"
+            }
           >
-          Questions
-          </a>
+            Questions
+          </NavLink>
         </div>
 
         {/* Right-aligned Login/Signup or Profile/Logout */}
@@ -101,7 +104,6 @@ const Navbar = () => {
         </div>
 
         {/* Mobile menu button */}
-
         <div className="md:hidden">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? (
@@ -113,28 +115,28 @@ const Navbar = () => {
         </div>
       </div>
 
-
-
-
       {/* Mobile Menu */}
-
       {isMenuOpen && (
         <div className="md:hidden bg-blue-600 mt-4">
-          <a 
-           href="#about"
-     
-            className="block px-4 py-2 text-white hover:bg-blue-500"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            About
-          </a>
-          <a href="contact"
-           
-            className="block px-4 py-2 text-white hover:bg-blue-500"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Contact
-          </a>
+          {isHome && (
+            <>
+              <a
+                href="#about"
+                className="block px-4 py-2 text-white hover:bg-blue-500"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </a>
+              <a
+                href="#contact"
+                className="block px-4 py-2 text-white hover:bg-blue-500"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </a>
+            </>
+          )}
+
           <NavLink
             to="/projects"
             className="block px-4 py-2 text-white hover:bg-blue-500"
@@ -143,10 +145,16 @@ const Navbar = () => {
             Projects
           </NavLink>
 
-          {/* Mobile Login/Signup or Profile/Logout */}
+          <NavLink
+            to="/question"
+            className="block px-4 py-2 text-white hover:bg-blue-500"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Questions
+          </NavLink>
+
           {!isLoggedIn ? (
             <>
-            
               <NavLink
                 to="/login"
                 className="block px-4 py-2 text-white hover:bg-blue-500"
@@ -161,7 +169,6 @@ const Navbar = () => {
               >
                 Sign Up
               </NavLink>
-
             </>
           ) : (
             <>

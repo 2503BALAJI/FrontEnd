@@ -1,20 +1,16 @@
-import { Link } from "react-router-dom";
+import React from "react";
 import Navbar from "../components/Navbar";
 
 const ClientLayout = ({ children }) => {
   return (
-    <div className="w-screen bg-[#f3f2f0]">
+    <div className="w-screen h-screen bg-[#f3f2f0] overflow-auto">
       {/* Include the Navbar */}
       <Navbar />
 
-      {/* Add a top padding equivalent to the navbar height */}
-      <div className="pt-16 h-screen bg-gray-100"> 
-
-       {children}
-
+      {/* Content area with padding to avoid overlap with fixed navbar */}
+      <div className="pt-20  bg-gray-100 h-full">
+        {children}
       </div>
-
-      
     </div>
   );
 };

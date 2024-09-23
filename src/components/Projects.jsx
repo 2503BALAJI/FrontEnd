@@ -30,7 +30,7 @@ const Projects = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white py-10 px-6">
+    <div className="h-full bg-white py-5 px-6">
       <div className="h-20"></div> {/* Spacer for navbar */}
       <h1 className="text-5xl font-bold text-gray-900 mb-12 text-center">
         Real Estate Projects

@@ -7,7 +7,6 @@ import AboutUs from "./AboutUs";
 import Question from "./Question";
 import Footer from "./Footer";
 
-
 const Home = () => {
   return (
     <>
@@ -34,15 +33,12 @@ const Home = () => {
         </div>
 
         {/* Main Section */}
-        
+
         <Vision />
         <InvestmentOptions />
         <Contact_us />
-        <AboutUs/>
-        <Question/>
-        <Footer/>
-
-        
+        <AboutUs />
+        <Footer />
       </div>
     </>
   );

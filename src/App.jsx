@@ -11,6 +11,9 @@ import VideoGrid from "./components/Vedio";
 import AdminPanelVedio from "./Admin/AdminPanelVedio";
 import Dashboard from "./Admin/Dashboard";
 import ProjectAdd from "./Admin/Projectadd";
+import AdminQuestions from "./Admin/AdminQuestions";
+import NotFoundPage from "./components/NotFoundPage";
+import Question from "./components/Question";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,6 +34,14 @@ const App = () => {
         element={
           <ClientLayout>
             <Login />
+          </ClientLayout>
+        }
+      />
+      <Route
+        path="/question"
+        element={
+          <ClientLayout>
+            <Question />
           </ClientLayout>
         }
       />
@@ -70,7 +81,7 @@ const App = () => {
         }
       />
       <Route
-        path="/admin/AdminPanelVedio"
+        path="/admin/AdminPanelVideo"
         element={
           <AdminLayout>
             <AdminPanelVedio />
@@ -85,6 +96,16 @@ const App = () => {
           </AdminLayout>
         }
       />
+
+      <Route
+        path="/admin/Questions"
+        element={
+          <AdminLayout>
+            <AdminQuestions />
+          </AdminLayout>
+        }
+      />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };
