@@ -10,6 +10,7 @@ import SignUp from "./components/SignUp";
 import VideoGrid from "./components/Vedio";
 import AdminPanelVedio from "./Admin/AdminPanelVedio";
 import Dashboard from "./Admin/Dashboard";
+import ProjectAdd from "./Admin/Projectadd";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -73,6 +74,14 @@ const App = () => {
         element={
           <AdminLayout>
             <AdminPanelVedio />
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="/admin/Project"
+        element={
+          <AdminLayout>
+            <ProjectAdd />
           </AdminLayout>
         }
       />

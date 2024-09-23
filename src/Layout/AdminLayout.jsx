@@ -4,6 +4,7 @@ const AdminLayout = ({ children }) => {
   const navItems = [
     { name: "Dashboard", link: "Dashboard" },
     { name: "Add Vedio", link: "AdminPanelVedio" },
+    { name: "Add Project", link: "Project" },
   ];
 
   return (

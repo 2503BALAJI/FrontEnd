@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import frameImg from "../assets/Images/frame.png";
 
-
 // Reusable InvestmentCard component
 const InvestmentCard = ({ title, imgUrl, onClick, altText }) => {
   return (
@@ -15,7 +14,7 @@ const InvestmentCard = ({ title, imgUrl, onClick, altText }) => {
           src={imgUrl}
           alt={altText}
           className="object-cover w-full h-full transition-opacity duration-300 group-hover:opacity-80"
-          onError={(e) => (e.target.src = {frameImg})} // Placeholder image on error
+          onError={(e) => (e.target.src = { frameImg })} // Placeholder image on error
         />
       </div>
       <h3 className="text-xl font-bold group-hover:text-blue-500 transition-colors duration-300">
@@ -33,7 +32,7 @@ const InvestmentOptions = () => {
       title: "Invest with us...",
       imgUrl:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQX1Ol48s5GK8aeC0ilc-6e5hypRp0MQWKtvQ&s",
-      onClick: () => navigate("/invest"),
+      onClick: () => navigate("/Projects"),
       altText: "Invest with Us",
     },
     {
@@ -54,9 +53,7 @@ const InvestmentOptions = () => {
 
   return (
     <div className="flex flex-wrap justify-center space-x-4 md:space-x-10 pt-20 py-10 ">
-
       {cardData.map((card, index) => (
-
         <InvestmentCard
           key={index}
           title={card.title}
@@ -64,7 +61,6 @@ const InvestmentOptions = () => {
           onClick={card.onClick}
           altText={card.altText}
         />
-
       ))}
     </div>
   );
