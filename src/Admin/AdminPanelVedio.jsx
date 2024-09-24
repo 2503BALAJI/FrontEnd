@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
 
-const AdminPanelVedio = () => {
+const AdminPanelVideo = () => {
   const [videos, setVideos] = useState([]);
   const [newVideo, setNewVideo] = useState({ title: "", link: "" });
   const [loading, setLoading] = useState(true);
@@ -47,13 +47,13 @@ const AdminPanelVedio = () => {
   };
 
   return (
-    <div className="min-h-screen py-12 px-8 bg-gray-100 flex flex-col items-center">
-      <h1 className="text-4xl font-extrabold text-gray-800 mb-8">
+    <div className="min-h-[calc(100vh-3.5rem)] py-6 px-4 sm:px-8 lg:px-12 bg-gray-100 flex flex-col items-center overflow-auto">
+      <h1 className="text-3xl lg:text-4xl font-extrabold text-gray-800 mb-8">
         Admin Panel - YouTube Videos
       </h1>
 
-      <div className="mb-8 w-full max-w-4xl">
-        <div className="flex flex-col md:flex-row mb-4">
+      <div className="mb-8 w-full max-w-4xl mx-auto">
+        <div className="flex flex-col md:flex-row md:space-x-2 mb-4">
           <input
             type="text"
             placeholder="Video Title"
@@ -61,16 +61,14 @@ const AdminPanelVedio = () => {
             onChange={(e) =>
               setNewVideo({ ...newVideo, title: e.target.value })
             }
-            className="border p-3 rounded-md flex-1 mb-2 md:mb-0 md:mr-2"
+            className="border p-3 rounded-md flex-1 mb-2 md:mb-0"
           />
           <input
             type="text"
             placeholder="Video Link"
             value={newVideo.link}
-            onChange={(e) =>
-              setNewVideo({ ...newVideo, link: e.target.value })
-            }
-            className="border p-3 rounded-md flex-1 mb-2 md:mb-0 md:mr-2"
+            onChange={(e) => setNewVideo({ ...newVideo, link: e.target.value })}
+            className="border p-3 rounded-md flex-1 mb-2 md:mb-0"
           />
           <button
             onClick={addVideo}
@@ -81,7 +79,7 @@ const AdminPanelVedio = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-4xl mx-auto">
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <ClipLoader size={60} color={"#4A90E2"} loading={loading} />
@@ -91,9 +89,9 @@ const AdminPanelVedio = () => {
             {videos.map((video) => (
               <div
                 key={video.id}
-                className="flex justify-between items-center p-4 bg-white rounded-md shadow-md"
+                className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-white rounded-md shadow-md"
               >
-                <div>
+                <div className="flex-1">
                   <h2 className="text-xl font-semibold text-gray-700">
                     {video.title}
                   </h2>
@@ -101,14 +99,14 @@ const AdminPanelVedio = () => {
                     href={video.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:text-blue-700"
+                    className="text-blue-500 hover:text-blue-700 break-words"
                   >
                     {video.link}
                   </a>
                 </div>
                 <button
                   onClick={() => deleteVideo(video.id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600"
+                  className="mt-4 sm:mt-0 bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600"
                 >
                   Delete
                 </button>
@@ -125,4 +123,4 @@ const AdminPanelVedio = () => {
   );
 };
 
-export default AdminPanelVedio;
+export default AdminPanelVideo;

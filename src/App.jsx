@@ -81,6 +81,14 @@ const App = () => {
         }
       />
       <Route
+        path="/admin"
+        element={
+          <AdminLayout>
+            <Dashboard />
+          </AdminLayout>
+        }
+      />
+      <Route
         path="/admin/AdminPanelVideo"
         element={
           <AdminLayout>

@@ -9,7 +9,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid"; // For unique file names
+import { v4 as uuidv4 } from "uuid";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const ProjectAdd = () => {
   const [projects, setProjects] = useState([]);
@@ -19,10 +20,19 @@ const ProjectAdd = () => {
     description: "",
     imageFile: null,
   });
+  const [selectedProject, setSelectedProject] = useState({
+    id: "",
+    name: "",
+    location: "",
+    description: "",
+    imageFile: null,
+    imageUrl: "",
+  });
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showModal, setShowModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   const projectsPerPage = 10;
 
@@ -70,7 +80,7 @@ const ProjectAdd = () => {
         description: "",
         imageFile: null,
       });
-      setShowModal(false);
+      setShowAddModal(false);
     } catch (error) {
       console.error("Error adding project: ", error);
     } finally {
@@ -78,11 +88,38 @@ const ProjectAdd = () => {
     }
   };
 
-  const handleUpdateProject = async (id, updatedProject) => {
+  const handleUpdateProject = async () => {
+    if (
+      !selectedProject.name ||
+      !selectedProject.location ||
+      !selectedProject.description
+    ) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    const updatedData = {
+      name: selectedProject.name,
+      location: selectedProject.location,
+      description: selectedProject.description,
+    };
+
+    if (selectedProject.imageFile) {
+      const imageRef = ref(storage, `projects/${uuidv4()}`);
+      await uploadBytes(imageRef, selectedProject.imageFile);
+      const imageUrl = await getDownloadURL(imageRef);
+      updatedData.imageUrl = imageUrl;
+    }
+
     try {
-      await updateDoc(doc(db, "projects", id), updatedProject);
+      await updateDoc(doc(db, "projects", selectedProject.id), updatedData);
+      setShowUpdateModal(false);
     } catch (error) {
       console.error("Error updating project: ", error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -94,7 +131,6 @@ const ProjectAdd = () => {
     }
   };
 
-  // Pagination Logic
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
   const currentProjects = projects.slice(
@@ -111,43 +147,56 @@ const ProjectAdd = () => {
 
       <div className="flex justify-end mb-6">
         <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-500 text-white p-2 rounded"
+          onClick={() => setShowAddModal(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow-md"
         >
           Add New Project
         </button>
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center h-64">
+          <ClipLoader color="#4A90E2" loading={loading} size={50} />
+        </div>
+      ) : projects.length === 0 ? (
+        <div className="text-center text-gray-500">No data found</div>
       ) : (
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {currentProjects.map((project) => (
-              <div key={project.id} className="border p-4 rounded-lg shadow-sm">
+              <div
+                key={project.id}
+                className="border p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out"
+              >
                 <img
                   src={project.imageUrl}
                   alt={project.name}
-                  className="w-full h-32 object-cover mb-4 rounded"
+                  className="w-full h-40 object-cover mb-4 rounded"
                 />
-                <h2 className="text-xl font-bold mb-2">{project.name}</h2>
+                <h2 className="text-xl font-semibold mb-2">{project.name}</h2>
                 <p className="text-sm text-gray-600 mb-2">{project.location}</p>
-                <p className="text-sm text-gray-700">{project.description}</p>
-                <div className="flex justify-between mt-4">
+                <p className="text-sm text-gray-700 mb-4">
+                  {project.description}
+                </p>
+                <div className="flex justify-between">
                   <button
-                    onClick={() =>
-                      handleUpdateProject(project.id, {
-                        ...project,
-                        name: "Updated Name", // Example update
-                      })
-                    }
-                    className="bg-yellow-500 text-white p-2 rounded"
+                    onClick={() => {
+                      setSelectedProject({
+                        id: project.id,
+                        name: project.name,
+                        location: project.location,
+                        description: project.description,
+                        imageUrl: project.imageUrl,
+                      });
+                      setShowUpdateModal(true);
+                    }}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-1 px-3 rounded"
                   >
                     Update
                   </button>
                   <button
                     onClick={() => handleDeleteProject(project.id)}
-                    className="bg-red-500 text-white p-2 rounded"
+                    className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded"
                   >
                     Delete
                   </button>
@@ -164,63 +213,27 @@ const ProjectAdd = () => {
         </div>
       )}
 
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2 lg:w-1/3">
-            <h2 className="text-2xl font-bold mb-4">Add New Project</h2>
-            <input
-              type="text"
-              placeholder="Project Name"
-              value={newProject.name}
-              onChange={(e) =>
-                setNewProject({ ...newProject, name: e.target.value })
-              }
-              className="border p-2 mb-2 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Location"
-              value={newProject.location}
-              onChange={(e) =>
-                setNewProject({ ...newProject, location: e.target.value })
-              }
-              className="border p-2 mb-2 w-full"
-            />
-            <textarea
-              placeholder="Description"
-              value={newProject.description}
-              onChange={(e) =>
-                setNewProject({ ...newProject, description: e.target.value })
-              }
-              className="border p-2 mb-2 w-full h-24"
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) =>
-                setNewProject({ ...newProject, imageFile: e.target.files[0] })
-              }
-              className="border p-2 mb-4 w-full"
-            />
-            <div className="flex justify-end">
-              <button
-                onClick={() => setShowModal(false)}
-                className="bg-gray-300 text-black p-2 rounded mr-2"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleAddProject}
-                disabled={submitting}
-                className={`p-2 rounded ${
-                  submitting ? "bg-blue-300" : "bg-blue-500 text-white"
-                }`}
-              >
-                {submitting ? "Submitting..." : "Add Project"}
-              </button>
-            </div>
-          </div>
-        </div>
+      {showAddModal && (
+        <Modal
+          title="Add New Project"
+          onClose={() => setShowAddModal(false)}
+          onSubmit={handleAddProject}
+          submitting={submitting}
+          project={newProject}
+          setProject={setNewProject}
+        />
+      )}
+
+      {showUpdateModal && (
+        <Modal
+          title="Update Project"
+          onClose={() => setShowUpdateModal(false)}
+          onSubmit={handleUpdateProject}
+          submitting={submitting}
+          project={selectedProject}
+          setProject={setSelectedProject}
+          isUpdate={true}
+        />
       )}
     </div>
   );
@@ -240,12 +253,81 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
           key={index}
           onClick={() => handleClick(index + 1)}
           className={`mx-1 px-4 py-2 rounded ${
-            currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+            currentPage === index + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
           }`}
         >
           {index + 1}
         </button>
       ))}
+    </div>
+  );
+};
+
+const Modal = ({
+  title,
+  onClose,
+  onSubmit,
+  submitting,
+  project,
+  setProject,
+  isUpdate = false,
+}) => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/3">
+        <h2 className="text-2xl font-bold mb-4">{title}</h2>
+        <input
+          type="text"
+          placeholder="Project Name"
+          value={project.name}
+          onChange={(e) => setProject({ ...project, name: e.target.value })}
+          className="border p-2 mb-3 w-full rounded"
+        />
+        <input
+          type="text"
+          placeholder="Location"
+          value={project.location}
+          onChange={(e) => setProject({ ...project, location: e.target.value })}
+          className="border p-2 mb-3 w-full rounded"
+        />
+        <textarea
+          placeholder="Description"
+          value={project.description}
+          onChange={(e) =>
+            setProject({ ...project, description: e.target.value })
+          }
+          className="border p-2 mb-3 w-full rounded"
+        />
+        <input
+          type="file"
+          onChange={(e) =>
+            setProject({ ...project, imageFile: e.target.files[0] })
+          }
+          className="border p-2 mb-3 w-full rounded"
+        />
+        {isUpdate && (
+          <img
+            src={project.imageUrl}
+            alt={project.name}
+            className="w-full h-40 object-cover mb-4 rounded"
+          />
+        )}
+        <div className="flex justify-end space-x-3">
+          <button
+            onClick={onClose}
+            className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onSubmit}
+            disabled={submitting}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+          >
+            {submitting ? "Submitting..." : "Submit"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
