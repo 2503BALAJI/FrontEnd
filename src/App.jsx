@@ -14,6 +14,7 @@ import ProjectAdd from "./Admin/Projectadd";
 import AdminQuestions from "./Admin/AdminQuestions";
 import NotFoundPage from "./components/NotFoundPage";
 import Question from "./components/Question";
+import Profile from "./components/Profile";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -59,6 +60,14 @@ const App = () => {
         element={
           <ClientLayout>
             <SignUp />
+          </ClientLayout>
+        }
+      />
+      <Route
+        path="/Profile"
+        element={
+          <ClientLayout>
+            <Profile />
           </ClientLayout>
         }
       />
