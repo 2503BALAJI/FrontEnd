@@ -32,7 +32,7 @@ const InvestmentOptions = () => {
       title: "Invest with us...",
       imgUrl:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQX1Ol48s5GK8aeC0ilc-6e5hypRp0MQWKtvQ&s",
-      onClick: () => navigate("/Projects"),
+      onClick: () => navigate("/projects"),
       altText: "Invest with Us",
     },
     {

@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { db } from "../Firebase/Firebaseconfig"; // Import your Firebase config
 import { collection, onSnapshot } from "firebase/firestore";
 import { ClipLoader } from "react-spinners"; // Import spinner for loading state
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 const Projects = () => {
   const [hoveredProject, setHoveredProject] = useState(null);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     // Fetching data from Firebase Firestore
@@ -40,9 +42,10 @@ const Projects = () => {
         {projects.map((project) => (
           <div
             key={project.id}
-            className="relative bg-white shadow-lg rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105"
+            className="relative bg-white shadow-lg rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 cursor-pointer"
             onMouseEnter={() => setHoveredProject(project)}
             onMouseLeave={() => setHoveredProject(null)}
+            onClick={() => navigate(`/projects/${project.id}`)} // Navigate to project details on click
           >
             <img
               src={project.imageUrl} // Assuming your Firebase data has an imageUrl field

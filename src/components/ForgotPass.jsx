@@ -1,90 +1,121 @@
-import React from "react";
-import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
+import { app } from "../Firebase/Firebaseconfig";
 
-//email verify zalyavr kay krayche te baki ahe  te handle kele nahi ahe
+const auth = getAuth(app);
 
 const ForgotPass = () => {
   const navigate = useNavigate();
-  const [passVisible, setPassVisible] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
   });
 
-  console.log(formData);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  function submitHandler(event) {
+  const submitHandler = async (event) => {
     event.preventDefault();
-    event.target.value;
-    console.log(event);
-  }
+    setLoading(true);
+    setError("");
+    setSuccess("");
 
-  function changeHandler(event) {
+    try {
+      // First attempt to sign in with the email (without password to check if the email exists)
+      await signInWithEmailAndPassword(auth, formData.email, "dummyPassword");
+    } catch (err) {
+      if (
+        err.code === "auth/wrong-password" ||
+        err.code === "auth/user-not-found"
+      ) {
+        // If wrong password, email exists and proceed with sending reset email
+        try {
+          await sendPasswordResetEmail(auth, formData.email);
+          setSuccess(
+            "Password reset email sent successfully. Check your inbox!"
+          );
+        } catch (resetError) {
+          setError("Failed to send reset email. Please try again.");
+        }
+      } else {
+        setError("Email not registered. Please check your email address.");
+      }
+    }
+
+    setLoading(false);
+  };
+
+  const changeHandler = (event) => {
     setFormData((prevData) => ({
       ...prevData,
       [event.target.name]: event.target.value,
     }));
-    //setFormData([event.target.name]= event.target.value)
-  }
+  };
 
-  function passwordHandler() {
-    setPassVisible(!passVisible);
-    // setType(false)
-  }
-
-  // w-11/12 max-w-[1160px] bg-black
   return (
-    <form>
-      <div className="h-screen w-11/12 mx-auto flex flex-col justify-center items-center  bg-gray-500">
-        <div className="w-[500px] h-[600px] bg-red-400 flex flex-col py-2 px-4  ">
-          <h2 className="font-bold text-3xl text-gray-700 mb-2">
-            Forgot Password
-          </h2>
-          <p className="text-left mb-5">
-            Welcome To The Legacy Land Investment
-          </p>
-          <p> Re-Create Your Password </p>
+    <div className="h-screen flex justify-center items-center bg-gray-100">
+      <form
+        onSubmit={submitHandler}
+        className="w-full max-w-md bg-white shadow-md rounded-lg p-6"
+      >
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+          Forgot Password
+        </h2>
+        <p className="text-gray-600 mb-6 text-center">
+          Re-create your password for Legacy Land Investment.
+        </p>
 
-          <label className="w-full">
-            <p className="text-[0.875rem] text-richblack-5 leading-[1.375rem] mb-1">
-              Enter Your Email Address <sup className="text-pink-500">*</sup>
-            </p>
-            <input
-              required
-              type="email"
-              value={formData.email}
-              name="email"
-              placeholder="Enter Email-address "
-              onChange={changeHandler}
-              className="bg-richblack-800 rounded-[0.5rem] text-richblack-5 w-full mb-2 p-[12px]  "
-            />
-          </label>
+        {/* Email Input */}
+        <label className="block mb-4">
+          <span className="text-gray-700">Email Address</span>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={changeHandler}
+            required
+            placeholder="Enter your email address"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-blue-500"
+          />
+        </label>
 
-          {/* button  */}
-          <button className="bg-yellow-500 rounded-[8px] font-medium  px-[12px] py-[8px] mt-6  ">
-            Verify
-          </button>
+        {/* Error and Success Messages */}
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {success && <p className="text-green-500 mb-4">{success}</p>}
 
-          <div className="flex w-full item-center my-4 gap-x-2">
-            <div className="bg-black h-[1px] w-full"></div>
-            <p className="text-black leading-[1.375rem] font-bold my-[-10px]">
-              OR
-            </p>
-            <div className="bg-black h-[1px] w-full"></div>
-          </div>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
+        >
+          {loading ? "Sending..." : "Send Reset Email"}
+        </button>
 
-          {/* forgott page link  */}
-
-          <p>
-            {" "}
-            Back To -{/* <NavLink to="SignUp"> Register</NavLink> */}
-            <button onClick={() => navigate("/Login")}>Login page</button>
-          </p>
+        {/* Divider */}
+        <div className="flex items-center my-6">
+          <div className="flex-grow h-px bg-gray-300"></div>
+          <span className="px-2 text-gray-500">OR</span>
+          <div className="flex-grow h-px bg-gray-300"></div>
         </div>
-      </div>
-    </form>
+
+        {/* Back to Login */}
+        <div className="text-center">
+          <button
+            onClick={() => navigate("/Login")}
+            className="text-blue-500 hover:underline"
+          >
+            Back to Login
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

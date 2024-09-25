@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { db, storage } from "../Firebase/Firebaseconfig";
+import { db, storage } from "../Firebase/Firebaseconfig"; // Adjust the import based on your firebase configuration
 import {
   collection,
   addDoc,
@@ -19,6 +19,14 @@ const ProjectAdd = () => {
     location: "",
     description: "",
     imageFile: null,
+    returnPercentage: "",
+    minInvestment: "",
+    maxInvestment: "",
+    startDate: "",
+    predictedEndDate: "",
+    workingTime: "",
+    contactNumber: "",
+    contactSchedule: "",
   });
   const [selectedProject, setSelectedProject] = useState({
     id: "",
@@ -27,6 +35,14 @@ const ProjectAdd = () => {
     description: "",
     imageFile: null,
     imageUrl: "",
+    returnPercentage: "",
+    minInvestment: "",
+    maxInvestment: "",
+    startDate: "",
+    predictedEndDate: "",
+    workingTime: "",
+    contactNumber: "",
+    contactSchedule: "",
   });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -49,42 +65,59 @@ const ProjectAdd = () => {
   }, []);
 
   const handleAddProject = async () => {
-    if (
-      !newProject.name ||
-      !newProject.location ||
-      !newProject.description ||
-      !newProject.imageFile
-    ) {
-      alert("Please fill in all fields and select an image.");
+    if (!newProject.imageFile) {
+      alert("Please select an image file.");
       return;
     }
 
     setSubmitting(true);
-
-    const imageRef = ref(storage, `projects/${uuidv4()}`);
-    await uploadBytes(imageRef, newProject.imageFile);
-    const imageUrl = await getDownloadURL(imageRef);
-
-    const projectData = {
-      name: newProject.name,
-      location: newProject.location,
-      description: newProject.description,
-      imageUrl,
-    };
-
     try {
+      // Step 1: Upload the file to Firebase Storage
+      const imageRef = ref(storage, `projects/${newProject.imageFile.name}`);
+      await uploadBytes(imageRef, newProject.imageFile);
+
+      // Step 2: Get the download URL
+      const imageUrl = await getDownloadURL(imageRef);
+
+      // Step 3: Add project data to Firestore
+      const projectData = {
+        name: newProject.name,
+        location: newProject.location,
+        description: newProject.description,
+        imageUrl, // Store the image URL instead of the File object
+        returnPercentage: newProject.returnPercentage,
+        minInvestment: newProject.minInvestment,
+        maxInvestment: newProject.maxInvestment,
+        startDate: newProject.startDate,
+        predictedEndDate: newProject.predictedEndDate,
+        workingTime: newProject.workingTime,
+        contactNumber: newProject.contactNumber,
+        contactSchedule: newProject.contactSchedule,
+      };
+
       await addDoc(collection(db, "projects"), projectData);
+      alert("Project added successfully!");
+      // Reset project state after successful addition
       setNewProject({
         name: "",
         location: "",
         description: "",
         imageFile: null,
+        returnPercentage: "",
+        minInvestment: "",
+        maxInvestment: "",
+        startDate: "",
+        predictedEndDate: "",
+        workingTime: "",
+        contactNumber: "",
+        contactSchedule: "",
       });
-      setShowAddModal(false);
     } catch (error) {
-      console.error("Error adding project: ", error);
+      console.error("Error adding project:", error);
+      alert("Error adding project. Please try again.");
     } finally {
       setSubmitting(false);
+      setShowAddModal(false); // Close modal after submission
     }
   };
 
@@ -104,6 +137,14 @@ const ProjectAdd = () => {
       name: selectedProject.name,
       location: selectedProject.location,
       description: selectedProject.description,
+      returnPercentage: selectedProject.returnPercentage,
+      minInvestment: selectedProject.minInvestment,
+      maxInvestment: selectedProject.maxInvestment,
+      startDate: selectedProject.startDate,
+      predictedEndDate: selectedProject.predictedEndDate,
+      workingTime: selectedProject.workingTime,
+      contactNumber: selectedProject.contactNumber,
+      contactSchedule: selectedProject.contactSchedule,
     };
 
     if (selectedProject.imageFile) {
@@ -187,6 +228,14 @@ const ProjectAdd = () => {
                         location: project.location,
                         description: project.description,
                         imageUrl: project.imageUrl,
+                        returnPercentage: project.returnPercentage,
+                        minInvestment: project.minInvestment,
+                        maxInvestment: project.maxInvestment,
+                        startDate: project.startDate,
+                        predictedEndDate: project.predictedEndDate,
+                        workingTime: project.workingTime,
+                        contactNumber: project.contactNumber,
+                        contactSchedule: project.contactSchedule,
                       });
                       setShowUpdateModal(true);
                     }}
@@ -239,11 +288,9 @@ const ProjectAdd = () => {
   );
 };
 
-export default ProjectAdd;
-
 const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
-  const handleClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handleClick = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -252,8 +299,10 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
         <button
           key={index}
           onClick={() => handleClick(index + 1)}
-          className={`mx-1 px-4 py-2 rounded ${
-            currentPage === index + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
+          className={`mx-1 px-3 py-1 rounded ${
+            currentPage === index + 1
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
           {index + 1}
@@ -273,52 +322,126 @@ const Modal = ({
   isUpdate = false,
 }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/3">
-        <h2 className="text-2xl font-bold mb-4">{title}</h2>
-        <input
-          type="text"
-          placeholder="Project Name"
-          value={project.name}
-          onChange={(e) => setProject({ ...project, name: e.target.value })}
-          className="border p-2 mb-3 w-full rounded"
-        />
-        <input
-          type="text"
-          placeholder="Location"
-          value={project.location}
-          onChange={(e) => setProject({ ...project, location: e.target.value })}
-          className="border p-2 mb-3 w-full rounded"
-        />
-        <textarea
-          placeholder="Description"
-          value={project.description}
-          onChange={(e) =>
-            setProject({ ...project, description: e.target.value })
-          }
-          className="border p-2 mb-3 w-full rounded"
-        />
-        <input
-          type="file"
-          onChange={(e) =>
-            setProject({ ...project, imageFile: e.target.files[0] })
-          }
-          className="border p-2 mb-3 w-full rounded"
-        />
-        {isUpdate && (
-          <img
-            src={project.imageUrl}
-            alt={project.name}
-            className="w-full h-40 object-cover mb-4 rounded"
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded shadow-md w-11/12 md:w-1/3 h-[90%] overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-4 text-center">{title}</h2>
+        <div>
+          <label className="block mb-2">Name:</label>
+          <input
+            type="text"
+            value={project.name}
+            onChange={(e) => setProject({ ...project, name: e.target.value })}
+            className="w-full border p-2 rounded mb-4"
+            required
           />
-        )}
-        <div className="flex justify-end space-x-3">
-          <button
-            onClick={onClose}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Cancel
-          </button>
+          <label className="block mb-2">Location:</label>
+          <input
+            type="text"
+            value={project.location}
+            onChange={(e) =>
+              setProject({ ...project, location: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
+          <label className="block mb-2">Description:</label>
+          <textarea
+            value={project.description}
+            onChange={(e) =>
+              setProject({ ...project, description: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
+          <label className="block mb-2">Image:</label>
+          <input
+            type="file"
+            onChange={(e) =>
+              setProject({ ...project, imageFile: e.target.files[0] })
+            }
+            className="mb-4"
+            accept="image/*"
+          />
+          <label className="block mb-2">Return Percentage:</label>
+          <input
+            type="text"
+            value={project.returnPercentage}
+            onChange={(e) =>
+              setProject({ ...project, returnPercentage: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
+          <label className="block mb-2">Minimum Investment:</label>
+          <input
+            type="text"
+            value={project.minInvestment}
+            onChange={(e) =>
+              setProject({ ...project, minInvestment: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
+          <label className="block mb-2">Maximum Investment:</label>
+          <input
+            type="text"
+            value={project.maxInvestment}
+            onChange={(e) =>
+              setProject({ ...project, maxInvestment: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
+          <label className="block mb-2">Start Date:</label>
+          <input
+            type="date"
+            value={project.startDate}
+            onChange={(e) =>
+              setProject({ ...project, startDate: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
+          <label className="block mb-2">Predicted End Date:</label>
+          <input
+            type="date"
+            value={project.predictedEndDate}
+            onChange={(e) =>
+              setProject({ ...project, predictedEndDate: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
+          <label className="block mb-2">Working Time:</label>
+          <input
+            type="text"
+            value={project.workingTime}
+            onChange={(e) =>
+              setProject({ ...project, workingTime: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
+          <label className="block mb-2">Contact Number:</label>
+          <input
+            type="text"
+            value={project.contactNumber}
+            onChange={(e) =>
+              setProject({ ...project, contactNumber: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
+          <label className="block mb-2">Contact Schedule:</label>
+          <input
+            type="text"
+            value={project.contactSchedule}
+            onChange={(e) =>
+              setProject({ ...project, contactSchedule: e.target.value })
+            }
+            className="w-full border p-2 rounded mb-4"
+            required
+          />
           <button
             onClick={onSubmit}
             disabled={submitting}
@@ -327,7 +450,15 @@ const Modal = ({
             {submitting ? "Submitting..." : "Submit"}
           </button>
         </div>
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-600"
+        >
+          &times;
+        </button>
       </div>
     </div>
   );
 };
+
+export default ProjectAdd;
