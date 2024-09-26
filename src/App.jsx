@@ -16,6 +16,7 @@ import NotFoundPage from "./components/NotFoundPage";
 import Question from "./components/Question";
 import Profile from "./components/Profile";
 import ProjectDetails from "./components/ProjectDetails";
+import Security from "./components/security";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -36,6 +37,14 @@ const App = () => {
         element={
           <ClientLayout>
             <Login />
+          </ClientLayout>
+        }
+      />
+      <Route
+        path="Security"
+        element={
+          <ClientLayout>
+            <Security />
           </ClientLayout>
         }
       />
