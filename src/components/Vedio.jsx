@@ -4,30 +4,42 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { ClipLoader } from "react-spinners"; // Assuming 'react-spinners' is installed
 
 // VideoCard Component to display individual video
+
 const VideoCard = ({ videoUrl, title }) => {
   return (
-    <div className="w-full  sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 py-6">
-      <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden transform hover:scale-105">
-        <div className="relative pb-56 h-0 overflow-hidden">
+
+    <div className="  sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 py-6 ">
+
+      <div className=" flex flex-col items-center justify-center rounded-lg shadow-md hover:shadow-xl transform transition-transform duration-300 hover:scale-105"
+      >
+
+       {/* youtube video section in testimoney  */}
+
+        <div className=" flex flex-wrap relative pb-56 h-0 bg-yellow-300 overflow-hidden">
           <iframe
-            className="absolute top-0 left-0 w-full h-full rounded-t-lg"
+            className="absolute top-0 left-0 w-full h-full rounded-lg"
             src={videoUrl}
             title={title}
-            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
+
         </div>
+
         <div className="p-4 text-center">
           <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
         </div>
       </div>
+
     </div>
   );
 };
 
+
+
 // Main component to show all videos
 const VideoGrid = () => {
+
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -48,7 +60,8 @@ const VideoGrid = () => {
   }, []);
 
   return (
-    <div className="h-[90%] py-10 px-4 flex flex-col items-center">
+    <div className="h-[90%]  py-10 px-4 flex flex-col ">
+
       <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">
         Our Videos
       </h1>
@@ -61,7 +74,7 @@ const VideoGrid = () => {
       ) : (
         <>
           {/* Video Grid */}
-          <div className="container mx-auto flex flex-wrap justify-center -mx-4">
+          <div className="container mx-auto flex flex-wrap justify-center ">
             {videos.length > 0 ? (
               videos.map((video) => (
                 <VideoCard

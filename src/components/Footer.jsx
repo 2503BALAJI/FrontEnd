@@ -10,8 +10,9 @@ import { FaRegAddressCard } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="w-full py-8 bg-gray-100">
-      <div className="container mx-auto w-11/12 bg-white py-6 px-4 md:px-8 rounded-2xl">
+    <footer className="w-full  h-auto py-8 bg-gray-100 pl-2   ">
+
+      <div className="container mx-auto w-11/12 bg-white py-6 px-4 md:px-8 ">
         {/* Navigation links */}
         <nav className="w-full flex flex-wrap justify-center items-center gap-4 sm:gap-8 mb-8">
           <a

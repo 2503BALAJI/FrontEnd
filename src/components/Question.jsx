@@ -25,7 +25,7 @@ const Question = () => {
 
   return (
     <div
-      className="w-11/12 mb-5 mx-auto  h-full my-4 p-6 bg-white rounded-xl shadow-md"
+      className="w-11/12 my-5 mx-auto py-6 bg-white rounded-xl  shadow-md"
       id={"question"}
     >
       <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 overflow-hidden">

@@ -9,10 +9,13 @@ import Footer from "./Footer";
 
 const Home = () => {
   return (
-    <>
-      <div className="relative w-full h-[calc(100vh-64px)]">
-        {/* Background Image */}
-        <img
+    // main div ahe ha 
+    <div >
+
+
+      <div className="relative w-full h-[calc(100vh-64px)] pt-0">
+               {/* Background Image */}
+               <img
           src={Mainimg}
           alt="Main"
           className="w-full h-full object-cover"
@@ -40,7 +43,9 @@ const Home = () => {
         <AboutUs />
         <Footer />
       </div>
-    </>
+
+
+    </div>
   );
 };
 

@@ -33,7 +33,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-blue-600 w-full text-white p-4 shadow-lg fixed top-0 z-50">
-      <div className="container w-11/12 mx-auto flex justify-between items-center">
+      <div className="container w-11/12 mx-auto flex justify-between items-center bg-red-500">
         <a href="/" className="flex items-center space-x-2">
           <p className="text-xl font-bold">Legacy Land Investment</p>
         </a>

@@ -4,16 +4,16 @@ import about_page from "../assets/Images/about_page.jpg";
 const AboutUs = () => {
   return (
     <div
-      className="flex flex-col items-center justify-center bg-gray-100 py-10"
+      className="w-full flex  flex-col items-center justify-center bg-gray-100 py-10 pl-2"
       id="about"
     >
-      <div className="w-11/12 bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="w-11/12 mx-auto bg-white rounded-xl  shadow-lg ">
         {/* Image Section */}
         <div className="relative">
           <img
             src={about_page}
             alt="Company"
-            className="w-full object-cover h-auto" // Removed fixed height classes
+            className="w-full object-cover rounded-lg " // Removed fixed height classes
           />
         </div>
 
