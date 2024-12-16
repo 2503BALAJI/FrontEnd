@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../Firebase/Firebaseconfig";
-import { collection, onSnapshot } from "firebase/firestore";
+import axios from "axios";
 import { ClipLoader } from "react-spinners"; // Assuming 'react-spinners' is installed
 
 // VideoCard Component to display individual video
 const VideoCard = ({ videoUrl, title }) => {
   return (
-    <div className="w-full  sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 py-6">
+    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 py-6">
       <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden transform hover:scale-105">
         <div className="relative pb-56 h-0 overflow-hidden">
           <iframe
@@ -32,19 +31,22 @@ const VideoGrid = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(db, "youtubeVideos"),
-      (snapshot) => {
-        const videoList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setVideos(videoList);
-        setLoading(false); // Set loading to false once data is fetched
+    const fetchVideos = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/videos");
+        if (response.data) {
+          setVideos(response.data); // Assuming response has a "data" field with the videos
+        } else {
+          console.error("Failed to fetch videos: ", response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching videos: ", error);
+      } finally {
+        setLoading(false);
       }
-    );
+    };
 
-    return () => unsubscribe();
+    fetchVideos();
   }, []);
 
   return (
@@ -65,7 +67,7 @@ const VideoGrid = () => {
             {videos.length > 0 ? (
               videos.map((video) => (
                 <VideoCard
-                  key={video.id}
+                  key={video._id} // Use _id from the API response
                   videoUrl={video.link}
                   title={video.title}
                 />

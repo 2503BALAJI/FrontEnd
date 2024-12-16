@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../Firebase/Firebaseconfig"; // Import your Firebase config
-import { collection, onSnapshot } from "firebase/firestore";
+import axios from "axios"; // Axios for making HTTP requests
 
 const Question = () => {
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]); // State to store questions
   const [openIndex, setOpenIndex] = useState(null); // Track which question is open
 
   useEffect(() => {
-    // Fetching data from Firebase Firestore
-    const unsubscribe = onSnapshot(collection(db, "questions"), (snapshot) => {
-      const questionList = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setQuestions(questionList);
-    });
+    // Fetching data from Flask API
+    const fetchQuestions = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/questions");
+        if (response.data.success) {
+          setQuestions(response.data.data); // Set questions from API response
+        } else {
+          console.error("Failed to fetch questions: ", response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching questions: ", error);
+      }
+    };
 
-    return () => unsubscribe(); // Cleanup the listener on component unmount
+    fetchQuestions();
   }, []);
 
   const toggleQuestion = (index) => {
@@ -25,17 +29,17 @@ const Question = () => {
 
   return (
     <div
-      className="w-11/12 mb-5 mx-auto  h-full my-4 p-6 bg-white rounded-xl shadow-md"
+      className="w-11/12 mb-5 mx-auto h-full my-4 p-6 bg-white rounded-xl shadow-md"
       id={"question"}
     >
       <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 overflow-hidden">
         Your Questions, Our Answers
       </h2>
 
-      {/* Map function to iterate over questions from Firebase */}
+      {/* Map function to iterate over questions */}
       {questions.map((faq, index) => (
         <div
-          key={faq.id}
+          key={faq._id} // Use _id as key from API response
           className="border rounded-lg mb-4 w-full sm:w-[90%] md:w-[75%] lg:w-[800px] mx-auto"
         >
           <button

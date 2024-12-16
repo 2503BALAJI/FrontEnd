@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../Firebase/Firebaseconfig"; // Adjust import based on your Firebase config location
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import axios from "axios";
 
 const AdminPanel = () => {
   const [usersData, setUsersData] = useState([]);
@@ -8,29 +7,27 @@ const AdminPanel = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(10);
 
+  // Fetch user data from Flask API
   useEffect(() => {
-    const fetchClientData = async () => {
+    const fetchUsers = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "clientdata"));
-        const fetchedUsers = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setUsersData(fetchedUsers);
+        const response = await axios.get("http://127.0.0.1:5000/api/users"); // Adjust Flask endpoint
+        setUsersData(response.data);
       } catch (error) {
-        console.error("Error fetching client data: ", error);
+        console.error("Error fetching user data: ", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchClientData();
+    fetchUsers();
   }, []);
 
+  // Delete a user
   const handleDeleteUser = async (id) => {
     try {
-      await deleteDoc(doc(db, "clientdata", id));
-      setUsersData(usersData.filter((user) => user.id !== id));
+      await axios.delete(`http://127.0.0.1:5000/api/users/${id}`); // Adjust Flask delete endpoint
+      setUsersData((prevUsers) => prevUsers.filter((user) => user._id !== id));
     } catch (error) {
       console.error("Error deleting user: ", error);
     }
@@ -54,7 +51,7 @@ const AdminPanel = () => {
         </div>
       ) : usersData.length > 0 ? (
         <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg p-4">
-          {/* Display as table for medium and larger devices */}
+          {/* Table Display for larger screens */}
           <div className="hidden md:block">
             <table className="min-w-full bg-white border border-gray-200">
               <thead>
@@ -81,7 +78,7 @@ const AdminPanel = () => {
               </thead>
               <tbody>
                 {currentUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
+                  <tr key={user._id} className="hover:bg-gray-50">
                     <td className="py-3 px-4 text-gray-700 border-b">
                       {user.firstName || "N/A"}
                     </td>
@@ -96,14 +93,12 @@ const AdminPanel = () => {
                     </td>
                     <td className="py-3 px-4 text-gray-700 border-b">
                       {user.createdAt
-                        ? new Date(
-                            user.createdAt.seconds * 1000
-                          ).toLocaleDateString()
+                        ? new Date(user.createdAt).toLocaleDateString()
                         : "N/A"}
                     </td>
                     <td className="py-3 px-4 text-gray-700 border-b">
                       <button
-                        onClick={() => handleDeleteUser(user.id)}
+                        onClick={() => handleDeleteUser(user._id)}
                         className="bg-red-500 hover:bg-red-600 text-white font-semibold px-3 py-2 rounded-md shadow-sm transition duration-150 ease-in-out"
                       >
                         Delete
@@ -115,11 +110,11 @@ const AdminPanel = () => {
             </table>
           </div>
 
-          {/* Display as cards for small devices */}
+          {/* Card Display for small screens */}
           <div className="md:hidden grid grid-cols-1 gap-4">
             {currentUsers.map((user) => (
               <div
-                key={user.id}
+                key={user._id}
                 className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
               >
                 <div className="flex flex-col space-y-2">
@@ -142,14 +137,12 @@ const AdminPanel = () => {
                   <div className="text-gray-700">
                     <span className="font-semibold">Account Created: </span>
                     {user.createdAt
-                      ? new Date(
-                          user.createdAt.seconds * 1000
-                        ).toLocaleDateString()
+                      ? new Date(user.createdAt).toLocaleDateString()
                       : "N/A"}
                   </div>
                   <div className="flex justify-end">
                     <button
-                      onClick={() => handleDeleteUser(user.id)}
+                      onClick={() => handleDeleteUser(user._id)}
                       className="bg-red-500 hover:bg-red-600 text-white font-semibold px-3 py-2 rounded-md shadow-sm transition duration-150 ease-in-out"
                     >
                       Delete
