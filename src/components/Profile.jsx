@@ -1,38 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../Firebase/Firebaseconfig";
-import { userAtom } from "../store";
+import axios from "axios";
 import Cookies from "js-cookie";
-import { useAtom } from "jotai";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const userUid = Cookies.get("userUid");
-  const [user, setUser] = useAtom(userAtom);
 
-  if (user === "out") {
-    navigate("/login", { replace: true });
-  }
   useEffect(() => {
-    const fetchUserData = async () => {
-      const docRef = doc(db, "clientdata", userUid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setUserData(docSnap.data());
-      } else {
-        console.log("No such document!");
-      }
-      setLoading(false);
-    };
-
-    fetchUserData();
-  }, [userUid]);
+    if (!userUid) {
+      navigate("/login", { replace: true });
+    } else {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get(`http://127.0.0.1:5000/profile?uid=${userUid}`);
+          if (response.data.success) {
+            setUserData(response.data.data);
+          } else {
+            console.error("Failed to fetch user data:", response.data.message);
+          }
+        } catch (err) {
+          console.error("Error fetching user data:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchUserData();
+    }
+  }, [userUid, navigate]);
 
   if (loading) return <div className="text-center">Loading...</div>;
+
+  if (!userData) return <div className="text-center">User data not found!</div>;
 
   return (
     <div className="p-4 max-w-2xl mx-auto">
@@ -41,7 +43,7 @@ const UserProfile = () => {
       {/* Profile Image */}
       <div className="flex justify-center mb-4">
         <img
-          src={userData.ProfileUrl}
+          src={userData.profilePictureUrl}
           alt="Profile"
           className="w-32 h-32 object-cover rounded-full border-4 border-gray-300"
         />
@@ -63,10 +65,10 @@ const UserProfile = () => {
           <strong>Phone Number:</strong> {userData.phoneNumber}
         </p>
         <p>
-          <strong>Address:</strong> {userData.Address}
+          <strong>Address:</strong> {userData.address}
         </p>
         <p>
-          <strong>Aadhar Number:</strong> {userData.AadharNumber}
+          <strong>Aadhar Number:</strong> {userData.aadharNumber}
         </p>
       </div>
 
@@ -75,7 +77,7 @@ const UserProfile = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <img
-            src={userData.AadharCardFortUrl}
+            src={userData.aadharCardFrontUrl}
             alt="Aadhar Card Front"
             className="w-full h-64 object-cover"
           />
@@ -86,7 +88,7 @@ const UserProfile = () => {
 
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <img
-            src={userData.AadharCardBackendUrl}
+            src={userData.aadharCardBackUrl}
             alt="Aadhar Card Back"
             className="w-full h-64 object-cover"
           />

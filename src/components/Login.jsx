@@ -1,33 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../Firebase/Firebaseconfig";
-import { useSetAtom } from "jotai";
-import { userAtom } from "../store"; // Adjust the import based on your file structure
-import Cookies from "js-cookie"; // Add js-cookie package
-
-const auth = getAuth(app);
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const navigate = useNavigate();
-  const setUser = useSetAtom(userAtom);
   const [passVisible, setPassVisible] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(""); // Track error messages
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  // Check if the user is already logged in
   useEffect(() => {
     const savedUid = Cookies.get("userUid");
     if (savedUid) {
-      // If the user is already logged in, navigate to profile
       navigate("/profile");
     }
   }, [navigate]);
 
+  // Handle form field changes
   const changeHandler = (event) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -35,60 +30,38 @@ const Login = () => {
     }));
   };
 
+  // Toggle password visibility
   const passwordHandler = () => {
     setPassVisible(!passVisible);
   };
 
+  // Handle form submission
   const submitHandler = async (event) => {
     event.preventDefault();
-
-    // Basic validation
-    if (!formData.email || !formData.password) {
-      setError("Please fill in all fields.");
-      return;
-    }
-
+    setError(""); // Reset the error state
+  
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
-      const user = userCredential.user;
-
-      // Store user uid and email in cookies
-      Cookies.set("userUid", user.uid, { expires: 7 });
-      Cookies.set("userEmail", formData.email, { expires: 7 });
-
-      // Update state with user data
-      setUser({ uid: user.uid, email: formData.email });
-
-      // Navigate to profile page on successful login
-      navigate("/profile", { replace: true });
+      const response = await axios.post("http://127.0.0.1:5000/login", formData);
+      const { success, uid, message } = response.data;
+  
+      if (success) {
+        // Store user information in cookies
+        Cookies.set("userUid", uid, { expires: 7 });
+        Cookies.set("userEmail", formData.email, { expires: 7 });
+        navigate("/profile", { replace: true });
+      } else {
+        setError(message || "Failed to log in. Please try again.");
+      }
     } catch (error) {
-      handleAuthError(error.code);
+      // Check if the error has a response with status and message
+      if (error.response && error.response.status === 401) {
+        setError(error.response.data.message || "Invalid email or password.");
+      } else {
+        setError("An error occurred while logging in. Please try again later.");
+      }
     }
   };
-
-  const handleAuthError = (errorCode) => {
-    switch (errorCode) {
-      case "auth/wrong-password":
-        setError("Incorrect password. Please try again.");
-        break;
-      case "auth/user-not-found":
-        setError("User not found. Please check your email.");
-        break;
-      case "auth/invalid-email":
-        setError("Invalid email address. Please enter a valid email.");
-        break;
-      case "auth/too-many-requests":
-        setError("Too many failed attempts. Please try again later.");
-        break;
-      default:
-        setError("Failed to log in. Please try again.");
-        break;
-    }
-  };
+  
 
   return (
     <form onSubmit={submitHandler}>
@@ -99,6 +72,7 @@ const Login = () => {
             Welcome back to Legacy Land Investment
           </p>
 
+          {/* Email Input */}
           <label className="w-full">
             <p className="text-sm text-gray-700 mb-2">
               Email Address <sup className="text-red-500">*</sup>
@@ -114,6 +88,7 @@ const Login = () => {
             />
           </label>
 
+          {/* Password Input */}
           <label className="w-full">
             <p className="text-sm text-gray-700 mb-2">
               Password <sup className="text-red-500">*</sup>
@@ -137,14 +112,21 @@ const Login = () => {
             </div>
           </label>
 
+          {/* Forgot Password */}
           <div className="text-right mt-2">
             <NavLink to="/forgotPass" className="text-blue-600">
               Forgot password?
             </NavLink>
           </div>
 
-          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {/* Display Error Message */}
+          {error && (
+            <p className="text-red-500 mt-4 bg-red-100 p-2 rounded-md text-center">
+              {error}
+            </p>
+          )}
 
+          {/* Submit Button */}
           <button
             type="submit"
             className="bg-blue-500 text-white w-full py-2 rounded-md mt-6 hover:bg-blue-600 transition"
@@ -152,6 +134,7 @@ const Login = () => {
             Sign In
           </button>
 
+          {/* Redirect to Signup */}
           <div className="text-center mt-4">
             <p>
               Don't have an account?{" "}

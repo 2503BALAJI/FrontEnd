@@ -1,12 +1,5 @@
 import { useState, useEffect } from "react";
-import { db } from "../Firebase/Firebaseconfig";
-import {
-  collection,
-  addDoc,
-  deleteDoc,
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
+import axios from "axios";
 import { ClipLoader } from "react-spinners";
 
 const AdminPanelVideo = () => {
@@ -14,35 +7,54 @@ const AdminPanelVideo = () => {
   const [newVideo, setNewVideo] = useState({ title: "", link: "" });
   const [loading, setLoading] = useState(true);
 
+  // Fetch videos from Flask API
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(db, "youtubeVideos"),
-      (snapshot) => {
-        const videoList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setVideos(videoList);
+    const fetchVideos = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/api/videos");
+        setVideos(response.data);
         setLoading(false);
-      },
-      (error) => {
-        console.error("Error fetching videos: ", error);
+      } catch (error) {
+        console.error("Error fetching videos:", error);
         setLoading(false);
       }
-    );
-    return () => unsubscribe();
+    };
+
+    fetchVideos();
   }, []);
 
+  // Add a new video
   const addVideo = async () => {
     if (newVideo.title && newVideo.link) {
-      await addDoc(collection(db, "youtubeVideos"), newVideo);
-      setNewVideo({ title: "", link: "" });
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:5000/api/videos",
+          newVideo
+        );
+        setVideos((prevVideos) => [
+          ...prevVideos,
+          { ...newVideo, id: response.data._id },
+        ]);
+        setNewVideo({ title: "", link: "" });
+      } catch (error) {
+        console.error("Error adding video:", error);
+      }
     }
   };
 
+  // Delete a video
   const deleteVideo = async (id) => {
-    if (window.confirm("Are you sure you want to delete this video?")) {
-      await deleteDoc(doc(db, "youtubeVideos", id));
+    try {
+      if (id) {
+        await axios.delete(`http://127.0.0.1:5000/api/videos/${id}`);
+        setVideos((prevVideos) =>
+          prevVideos.filter((video) => video._id !== id)
+        ); // Filter out the deleted video
+      } else {
+        console.error("Invalid ID for deletion");
+      }
+    } catch (error) {
+      console.error("Error deleting video:", error);
     }
   };
 
@@ -88,7 +100,7 @@ const AdminPanelVideo = () => {
           <div className="space-y-4">
             {videos.map((video) => (
               <div
-                key={video.id}
+                key={video._id} // Make sure the key is the id of the video
                 className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-white rounded-md shadow-md"
               >
                 <div className="flex-1">
@@ -105,7 +117,7 @@ const AdminPanelVideo = () => {
                   </a>
                 </div>
                 <button
-                  onClick={() => deleteVideo(video.id)}
+                  onClick={() => deleteVideo(video._id)} // Using the correct id for deletion
                   className="mt-4 sm:mt-0 bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600"
                 >
                   Delete
